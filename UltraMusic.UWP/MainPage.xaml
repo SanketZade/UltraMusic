@@ -38,7 +38,11 @@
             </Grid.ColumnDefinitions>
             
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" RequestedTheme="Dark" Margin="24,0">
-                <Button Style="{StaticResource ButtonRevealStyle}" Margin="4" Width="{StaticResource PlaybackButtonDimension}" Height="{StaticResource PlaybackButtonDimension}">
+                <Button x:Name="PreviousButton"
+                        Click="PreviousButton_Click"
+                        Style="{StaticResource ButtonRevealStyle}" 
+                        Margin="4" Width="{StaticResource PlaybackButtonDimension}" 
+                        Height="{StaticResource PlaybackButtonDimension}">
                     <Button.Content> 
                         <SymbolIcon Symbol="Previous"/>
                     </Button.Content>
@@ -53,7 +57,11 @@
                     IsEnabled="{Binding PlayerState, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Playing|Paused}"
                     Content="{Binding PlayerState, Converter={StaticResource PlayerStateToSymbolConverter}}">
                 </Button>
-                <Button Style="{StaticResource ButtonRevealStyle}" Margin="4" Width="{StaticResource PlaybackButtonDimension}" Height="{StaticResource PlaybackButtonDimension}">
+                <Button x:Name="NextButton"
+                        Click="NextButton_Click"
+                        Style="{StaticResource ButtonRevealStyle}" 
+                        Margin="4" Width="{StaticResource PlaybackButtonDimension}" 
+                        Height="{StaticResource PlaybackButtonDimension}">
                     <Button.Content>
                         <SymbolIcon Symbol="Next"/>
                     </Button.Content>

@@ -85,5 +85,15 @@ namespace UltraMusic.UWP
         {
             MainNavigationView.IsPaneOpen = false;
         }
+
+        private async void PreviousButton_Click(object sender, RoutedEventArgs e)
+        {
+            await VM.Previous();
+        }
+
+        private async void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            await VM.Next();
+        }
     }
 }

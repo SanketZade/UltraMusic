@@ -77,6 +77,7 @@ function search(query) {
     e.initEvent("keydown");
     e.which = e.keyCode = 13;
     s.dispatchEvent(e);
+    return "true";
 }
 
 areUMFunctionsAvailable = "true";
