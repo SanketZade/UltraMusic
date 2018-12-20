@@ -5,16 +5,22 @@ using System.Threading.Tasks;
 using UltraMusic.Portable.Models;
 using Newtonsoft.Json;
 using System.IO;
+using UltraMusic.Portable.Helpers;
+using System.Linq;
 
 namespace UltraMusic.Portable.ViewModels
 {
     public abstract class MainViewModel : ViewModelBase
     {
         private readonly Func<MusicProvider, WebViewWrapperBase> wrapperFactory;
+        private readonly FileSystemHelper fileSystemHelper;
+        private readonly SettingsHelper settingsHelper;
 
-        public MainViewModel(Func<MusicProvider, WebViewWrapperBase> wrapperFactory) 
+        public MainViewModel(Func<MusicProvider, WebViewWrapperBase> wrapperFactory, SettingsHelper settingsHelper, FileSystemHelper fileSystemHelper) 
         {
             this.wrapperFactory = wrapperFactory;
+            this.settingsHelper = settingsHelper;
+            this.fileSystemHelper = fileSystemHelper;
         }
 
         private WebViewWrapperBase nowPlayingViewWrapper;
@@ -166,36 +172,17 @@ namespace UltraMusic.Portable.ViewModels
 
         public async void LoadMusicProvidersAsync()
         {
-            MusicProviders = await GetProvidersAsync();
+            List<MusicProvider> musicProviders = await fileSystemHelper.GetProvidersAsync();
+            string[] enabledMusicProviders = settingsHelper.GetEnabledProviders();
+            var filtered = musicProviders.Where(p => enabledMusicProviders.Contains(p.Id)).ToList();
+            MusicProviders = filtered;
         }
-
-        private async Task<List<MusicProvider>> GetProvidersAsync()
-        {
-            string specDirectory = GetProvidersSpecDirectory();
-            string specJson = await GetText(Path.Combine(specDirectory, "Spec.json"));
-            var providers = JsonConvert.DeserializeObject<List<MusicProvider>>(specJson);
-            foreach (var provider in providers)
-            {
-                string id = provider.Id;
-                provider.FunctionsJs = await GetText(specDirectory, id, "Functions.js");               
-            }
-            return providers;
-        }
-
-        public abstract string GetProvidersSpecDirectory();
 
         #endregion
 
         public override void Loaded()
         {
             LoadMusicProvidersAsync();
-        }
-
-        private async Task<string> GetText(params string[] fragments)
-        {
-            string filePath = Path.Combine(fragments);
-            using (StreamReader reader = File.OpenText(filePath))
-                return await reader.ReadToEndAsync();
         }
     }
 }

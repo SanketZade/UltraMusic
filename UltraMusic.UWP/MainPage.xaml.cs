@@ -62,8 +62,10 @@ namespace UltraMusic.UWP
         {
             sender.IsPaneOpen = false;
             if (args.IsSettingsSelected)
+            {
+                sender.Content = new View.SettingsUserControl();
                 return;
-
+            }
             string providerId = ((NavigationViewItem)args.SelectedItem).Tag.ToString();
             var wrapper = VM.GetWebViewWrapper(VM.MusicProviders.Find(p => p.Id == providerId));
             sender.Content = wrapper.WebView;

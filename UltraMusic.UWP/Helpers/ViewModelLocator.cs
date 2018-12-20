@@ -14,8 +14,38 @@ namespace UltraMusic.UWP.Helpers
         {
             get
             {
-                mainViewModel = mainViewModel ?? new MainViewModel();
+                mainViewModel = mainViewModel ?? new MainViewModel(SettingsHelper, FileSystemHelper);
                 return mainViewModel;
+            }
+        }
+
+        private static SettingsViewModel settingsViewModel;
+        public static SettingsViewModel SettingsViewModel
+        {
+            get
+            {
+                settingsViewModel = settingsViewModel ?? new SettingsViewModel(SettingsHelper, FileSystemHelper);
+                return settingsViewModel;
+            }
+        }
+
+        private static FileSystemHelper fileSystemHelper;
+        public static FileSystemHelper FileSystemHelper
+        {
+            get
+            {
+                fileSystemHelper = fileSystemHelper ?? new FileSystemHelper();
+                return fileSystemHelper;
+            }
+        }
+
+        private static SettingsHelper settingsHelper;
+        public static SettingsHelper SettingsHelper
+        {
+            get
+            {
+                settingsHelper = settingsHelper ?? new SettingsHelper();
+                return settingsHelper;
             }
         }
     }
